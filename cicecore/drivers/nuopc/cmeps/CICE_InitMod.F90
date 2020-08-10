@@ -40,44 +40,43 @@
         !  Initialize the basic state, grid and all necessary parameters for
         !  running the CICE model.
 
-      use ice_arrays_column, only: hin_max, c_hi_range, alloc_arrays_column
-      use ice_arrays_column, only: floe_rad_l, floe_rad_c, &
-          floe_binwidth, c_fsd_range
-      use ice_state, only: alloc_state
-      use ice_flux_bgc, only: alloc_flux_bgc
-      use ice_calendar, only: dt, dt_dyn, time, istep, istep1, write_ic, &
-          init_calendar, calendar
-      use ice_communicate, only: my_task, master_task
-      use ice_diagnostics, only: init_diags
-      use ice_domain, only: init_domain_blocks
-      use ice_domain_size, only: ncat, nfsd
-      use ice_dyn_eap, only: init_eap, alloc_dyn_eap
-      use ice_dyn_shared, only: kdyn, init_evp, alloc_dyn_shared
-      use ice_flux, only: init_coupler_flux, init_history_therm, &
-          init_history_dyn, init_flux_atm, init_flux_ocn, alloc_flux
-      use ice_forcing, only: init_forcing_ocn
-      use ice_forcing_bgc, only: get_forcing_bgc, get_atm_bgc, &
-          faero_default, faero_optics, alloc_forcing_bgc, fiso_default
-      use ice_grid, only: init_grid1, init_grid2, alloc_grid
-      use ice_history, only: init_hist, accum_hist
-      use ice_restart_shared, only: restart, runtype
-      use ice_init, only: input_data, init_state
-      use ice_init_column, only: init_thermo_vertical, init_shortwave, init_zbgc, input_zbgc, count_tracers
+      use ice_arrays_column,    only: hin_max, c_hi_range, alloc_arrays_column
+      use ice_arrays_column,    only: floe_rad_l, floe_rad_c, &
+                                      floe_binwidth, c_fsd_range
+      use ice_state,            only: alloc_state
+      use ice_flux_bgc,         only: alloc_flux_bgc
+      use ice_calendar,         only: dt, dt_dyn, time, istep, istep1, write_ic, &
+                                      init_calendar, calendar
+      use ice_communicate,      only: my_task, master_task
+      use ice_diagnostics,      only: init_diags
+      use ice_domain,           only: init_domain_blocks
+      use ice_domain_size,      only: ncat, nfsd
+      use ice_dyn_eap,          only: init_eap, alloc_dyn_eap
+      use ice_dyn_shared,       only: kdyn, init_evp, alloc_dyn_shared
+      use ice_flux,             only: init_coupler_flux, init_history_therm, &
+                                      init_history_dyn, init_flux_atm, init_flux_ocn, alloc_flux
+      use ice_forcing,          only: init_forcing_ocn
+      use ice_forcing_bgc,      only: get_forcing_bgc, get_atm_bgc, &
+                                      faero_default, faero_optics, alloc_forcing_bgc, fiso_default
+      use ice_grid,             only: init_grid1, init_grid2, alloc_grid
+      use ice_history,          only: init_hist, accum_hist
+      use ice_restart_shared,   only: restart, runtype
+      use ice_init,             only: input_data, init_state
+      use ice_init_column,      only: init_thermo_vertical, init_shortwave, init_zbgc, input_zbgc, count_tracers
       use ice_kinds_mod
-      use ice_restoring, only: ice_HaloRestore_init
-      use ice_timers, only: timer_total, init_ice_timers, ice_timer_start
+      use ice_restoring,        only: ice_HaloRestore_init
+      use ice_timers,           only: timer_total, init_ice_timers, ice_timer_start
       use ice_transport_driver, only: init_transport
 
       logical(kind=log_kind) :: tr_aero, tr_zaero, skl_bgc, z_tracers, &
-         tr_iso, tr_fsd, wave_spec
+                                tr_iso, tr_fsd, wave_spec
       character(len=*), parameter :: subname = '(cice_init)'
 
       call init_fileunits       ! unit numbers
 
       call icepack_configure()  ! initialize icepack
       call icepack_warnings_flush(nu_diag)
-      if (icepack_warnings_aborted()) call abort_ice(trim(subname), &
-          file=__FILE__,line= __LINE__)
+      if (icepack_warnings_aborted()) call abort_ice(trim(subname), file=__FILE__,line= __LINE__)
 
       call input_data           ! namelist variables
       call input_zbgc           ! vertical biogeochemistry namelist
@@ -139,7 +138,7 @@
       call ice_HaloRestore_init ! restored boundary conditions
 
       call icepack_query_parameters(skl_bgc_out=skl_bgc, z_tracers_out=z_tracers, &
-          wave_spec_out=wave_spec)
+                                    wave_spec_out=wave_spec)
       call icepack_warnings_flush(nu_diag)
       if (icepack_warnings_aborted()) call abort_ice(trim(subname), &
           file=__FILE__,line= __LINE__)
@@ -233,7 +232,7 @@
       call icepack_query_tracer_sizes(ntrcr_out=ntrcr)
       call icepack_warnings_flush(nu_diag)
       if (icepack_warnings_aborted()) call abort_ice(error_message=subname, &
-          file=__FILE__, line=__LINE__)
+                                                     file=__FILE__, line=__LINE__)
 
       call icepack_query_parameters(skl_bgc_out=skl_bgc, &
            z_tracers_out=z_tracers, solve_zsal_out=solve_zsal)
@@ -247,7 +246,7 @@
            nt_isosno_out=nt_isosno, nt_isoice_out=nt_isoice)
       call icepack_warnings_flush(nu_diag)
       if (icepack_warnings_aborted()) call abort_ice(error_message=subname, &
-         file=__FILE__, line=__LINE__)
+                                                     file=__FILE__, line=__LINE__)
 
       if (trim(runtype) == 'continue') then 
          ! start from core restart file
@@ -393,7 +392,7 @@
             write (nu_diag,*) 'FSD implementation incomplete for use with BGC'
             call icepack_warnings_flush(nu_diag)
             if (icepack_warnings_aborted()) call abort_ice(error_message=subname, &
-               file=__FILE__, line=__LINE__)
+                                                           file=__FILE__, line=__LINE__)
          endif
          call init_bgc
       endif
@@ -402,38 +401,38 @@
       ! aggregate tracers
       !-----------------------------------------------------------------
 
-      !$OMP PARALLEL DO PRIVATE(iblk)
+      !$OMP PARALLEL DO PRIVATE(iblk,i,j)
       do iblk = 1, nblocks
-      do j = 1, ny_block
-      do i = 1, nx_block
-         if (tmask(i,j,iblk)) then
-            call icepack_aggregate(ncat  = ncat,                  &
-                                   aicen = aicen(i,j,:,iblk),     &
-                                   trcrn = trcrn(i,j,:,:,iblk),   &
-                                   vicen = vicen(i,j,:,iblk),     &
-                                   vsnon = vsnon(i,j,:,iblk),     &
-                                   aice  = aice (i,j,  iblk),     &
-                                   trcr  = trcr (i,j,:,iblk),     &
-                                   vice  = vice (i,j,  iblk),     &
-                                   vsno  = vsno (i,j,  iblk),     &
-                                   aice0 = aice0(i,j,  iblk),     &
-                                   ntrcr = ntrcr,                 &
-                                   trcr_depend   = trcr_depend,   &
-                                   trcr_base     = trcr_base,     &
-                                   n_trcr_strata = n_trcr_strata, &
-                                   nt_strata     = nt_strata)
-         else
+        do j = 1, ny_block
+          do i = 1, nx_block
+            if (tmask(i,j,iblk)) then
+              call icepack_aggregate(ncat  = ncat,                  &
+                                     aicen = aicen(i,j,:,iblk),     &
+                                     trcrn = trcrn(i,j,:,:,iblk),   &
+                                     vicen = vicen(i,j,:,iblk),     &
+                                     vsnon = vsnon(i,j,:,iblk),     &
+                                     aice  = aice (i,j,  iblk),     &
+                                     trcr  = trcr (i,j,:,iblk),     &
+                                     vice  = vice (i,j,  iblk),     &
+                                     vsno  = vsno (i,j,  iblk),     &
+                                     aice0 = aice0(i,j,  iblk),     &
+                                     ntrcr = ntrcr,                 &
+                                     trcr_depend   = trcr_depend,   &
+                                     trcr_base     = trcr_base,     &
+                                     n_trcr_strata = n_trcr_strata, &
+                                     nt_strata     = nt_strata)
+            else
             ! tcraig, reset all tracer values on land to zero
-            trcrn(i,j,:,:,iblk) = c0
-         endif
-      enddo
-      enddo
+              trcrn(i,j,:,:,iblk) = c0
+            endif
+          enddo
+        enddo
       enddo
       !$OMP END PARALLEL DO
 
       call icepack_warnings_flush(nu_diag)
       if (icepack_warnings_aborted()) call abort_ice(error_message=subname, &
-         file=__FILE__, line=__LINE__)
+                                                     file=__FILE__, line=__LINE__)
 
       end subroutine init_restart
 

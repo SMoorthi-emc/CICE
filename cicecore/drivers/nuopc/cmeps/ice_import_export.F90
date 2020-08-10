@@ -35,7 +35,7 @@ module ice_import_export
   use icepack_intfc      , only : icepack_warnings_flush, icepack_warnings_aborted
   use icepack_intfc      , only : icepack_query_parameters, icepack_query_tracer_flags
   use icepack_intfc      , only : icepack_liquidus_temperature
-  use cice_wrapper_mod    , only : t_startf, t_stopf, t_barrierf
+  use cice_wrapper_mod   , only : t_startf, t_stopf, t_barrierf
 #ifdef CESMCOUPLED
   use shr_frz_mod        , only : shr_frz_freezetemp
 #endif
@@ -88,8 +88,7 @@ module ice_import_export
   type(ESMF_GeomType_Flag) :: geomtype
 
   integer     , parameter  :: dbug = 10        ! i/o debug messages
-  character(*), parameter  :: u_FILE_u = &
-       __FILE__
+  character(*), parameter  :: u_FILE_u = __FILE__
 
 !==============================================================================
 contains
@@ -182,7 +181,7 @@ contains
 
     do n = 1,fldsToIce_num
        call NUOPC_Advertise(importState, standardName=fldsToIce(n)%stdname, &
-            TransferOfferGeomObject='will provide', rc=rc)
+                            TransferOfferGeomObject='will provide', rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
     end do
 
@@ -212,7 +211,7 @@ contains
     ! in the cmeps esmFldsExchange_xxx_mod.F90 that is model specific
     if (send_i2x_per_cat) then
        call fldlist_add(fldsFrIce_num, fldsFrIce, 'ice_fraction_n', &
-            ungridded_lbound=1, ungridded_ubound=ncat)
+                        ungridded_lbound=1, ungridded_ubound=ncat)
     end if
 #endif
 
@@ -236,7 +235,7 @@ contains
 #if (defined NEWCODE)
     if (send_i2x_per_cat) then
        call fldlist_add(fldsFrIce_num, fldsFrIce, 'mean_sw_pen_to_ocn_ifrac_n', &
-            ungridded_lbound=1, ungridded_ubound=ncat)
+                        ungridded_lbound=1, ungridded_ubound=ncat)
     end if
 #endif
     call fldlist_add(fldsFrIce_num , fldsFrIce, 'mean_fresh_water_to_ocean_rate' )
@@ -252,16 +251,16 @@ contains
 
     if (flds_wiso) then
        call fldlist_add(fldsFrIce_num, fldsFrIce, 'mean_fresh_water_to_ocean_rate_wiso', &
-            ungridded_lbound=1, ungridded_ubound=3)
-       !call fldlist_add(fldsFrIce_num, fldsFrIce, 'mean_evap_rate_atm_into_ice_wiso', &
-       !     ungridded_lbound=1, ungridded_ubound=3)
+                        ungridded_lbound=1, ungridded_ubound=3)
+      !call fldlist_add(fldsFrIce_num, fldsFrIce, 'mean_evap_rate_atm_into_ice_wiso', &
+      !                 ungridded_lbound=1, ungridded_ubound=3)
        call fldlist_add(fldsFrIce_num, fldsFrIce, 'Si_qref_wiso', &
-            ungridded_lbound=1, ungridded_ubound=3)
+                        ungridded_lbound=1, ungridded_ubound=3)
     end if
 
     do n = 1,fldsFrIce_num
        call NUOPC_Advertise(exportState, standardName=fldsFrIce(n)%stdname, &
-            TransferOfferGeomObject='will provide', rc=rc)
+                            TransferOfferGeomObject='will provide', rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
     enddo
 
@@ -296,51 +295,47 @@ contains
 
        geomtype = ESMF_GEOMTYPE_MESH
 
-       call fldlist_realize( &
-            state=ExportState, &
-            fldList=fldsFrIce, &
-            numflds=fldsFrIce_num, &
-            flds_scalar_name=flds_scalar_name, &
-            flds_scalar_num=flds_scalar_num, &
-            tag=subname//':CICE_Export',&
-            mesh=mesh, rc=rc)
+       call fldlist_realize(state=ExportState,                 &
+                            fldList=fldsFrIce,                 &
+                            numflds=fldsFrIce_num,             &
+                            flds_scalar_name=flds_scalar_name, &
+                            flds_scalar_num=flds_scalar_num,   &
+                            tag=subname//':CICE_Export',       &
+                            mesh=mesh, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
-       call fldlist_realize( &
-            state=importState, &
-            fldList=fldsToIce, &
-            numflds=fldsToIce_num, &
-            flds_scalar_name=flds_scalar_name, &
-            flds_scalar_num=flds_scalar_num, &
-            tag=subname//':CICE_Import',&
-            mesh=mesh, rc=rc)
+       call fldlist_realize(state=importState,                 &
+                            fldList=fldsToIce,                 &
+                            numflds=fldsToIce_num,             &
+                            flds_scalar_name=flds_scalar_name, &
+                            flds_scalar_num=flds_scalar_num,   &
+                            tag=subname//':CICE_Import',       &
+                            mesh=mesh, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     else if (present(grid)) then
 
        geomtype = ESMF_GEOMTYPE_GRID
 
-       call fldlist_realize( &
-            state=ExportState, &
-            fldList=fldsFrIce, &
-            numflds=fldsFrIce_num, &
-            flds_scalar_name=flds_scalar_name, &
-            flds_scalar_num=flds_scalar_num, &
-            tag=subname//':CICE_Export',&
-            grid=grid, rc=rc)
+       call fldlist_realize(state=ExportState,                 &
+                            fldList=fldsFrIce,                 &
+                            numflds=fldsFrIce_num,             &
+                            flds_scalar_name=flds_scalar_name, &
+                            flds_scalar_num=flds_scalar_num,   &
+                            tag=subname//':CICE_Export',       &
+                            grid=grid, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
-       call fldlist_realize( &
-            state=importState, &
-            fldList=fldsToIce, &
-            numflds=fldsToIce_num, &
-            flds_scalar_name=flds_scalar_name, &
-            flds_scalar_num=flds_scalar_num, &
-            tag=subname//':CICE_Import',&
-            grid=grid, rc=rc)
+       call fldlist_realize(state=importState,                 &
+                            fldList=fldsToIce,                 &
+                            numflds=fldsToIce_num,             &
+                            flds_scalar_name=flds_scalar_name, &
+                            flds_scalar_num=flds_scalar_num,   &
+                            tag=subname//':CICE_Import',       &
+                            grid=grid, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
-    end if
+    endif
 
   end subroutine ice_realize_fields
 
@@ -359,7 +354,7 @@ contains
     integer                          :: ilo, ihi, jlo, jhi !beginning and end of physical domain
     type(block)                      :: this_block         ! block information for current block
     real (kind=dbl_kind),allocatable :: aflds(:,:,:,:)
-    real (kind=dbl_kind)             :: workx, worky
+    real (kind=dbl_kind)             :: workx, worky, cosa, sina
     real (kind=dbl_kind)             :: MIN_RAIN_TEMP, MAX_SNOW_TEMP
     real (kind=dbl_kind)             :: tffresh
     real (kind=dbl_kind)             :: inst_pres_height_lowest  
@@ -375,7 +370,7 @@ contains
 !       tr_zaero_out=tr_zaero, tr_bgc_Nit_out=tr_bgc_Nit)
     call icepack_warnings_flush(nu_diag)
     if (icepack_warnings_aborted()) call abort_ice(error_message=subname, &
-        file=u_FILE_u, line=__LINE__)
+                                                   file=u_FILE_u, line=__LINE__)
 
     ! Note that the precipitation fluxes received from the mediator
     ! are in units of kg/s/m^2 which is what CICE requires.
@@ -462,61 +457,61 @@ contains
 
     ! now fill in the ice internal data types
 
-    !$OMP PARALLEL DO PRIVATE(iblk,i,j)
-    do iblk = 1, nblocks
-       do j = 1,ny_block
-          do i = 1,nx_block
-             sst  (i,j,iblk)         = aflds(i,j, 1,iblk)
-             sss  (i,j,iblk)         = aflds(i,j, 2,iblk)
-             zlvl (i,j,iblk)         = aflds(i,j, 3,iblk)
-             ! see below for 4,5,6
-             Tair (i,j,iblk)         = aflds(i,j, 7,iblk)
-             Qa   (i,j,iblk)         = aflds(i,j, 8,iblk)
-             frzmlt (i,j,iblk)       = aflds(i,j, 9,iblk)
-             swvdr(i,j,iblk)         = aflds(i,j,10,iblk)
-             swidr(i,j,iblk)         = aflds(i,j,11,iblk)
-             swvdf(i,j,iblk)         = aflds(i,j,12,iblk)
-             swidf(i,j,iblk)         = aflds(i,j,13,iblk)
-             flw  (i,j,iblk)         = aflds(i,j,14,iblk)
-             frain(i,j,iblk)         = aflds(i,j,15,iblk)
-             fsnow(i,j,iblk)         = aflds(i,j,16,iblk)
-          end do
-       end do
-    end do
-    !$OMP END PARALLEL DO
+!$OMP PARALLEL DO PRIVATE(iblk,i,j)
+    do iblk = 1,nblocks
+      do j = 1,ny_block
+        do i = 1,nx_block
+          sst   (i,j,iblk) = aflds(i,j, 1,iblk)
+          sss   (i,j,iblk) = aflds(i,j, 2,iblk)
+          zlvl  (i,j,iblk) = aflds(i,j, 3,iblk)
+! see below for 4,5,6
+          Tair  (i,j,iblk) = aflds(i,j, 7,iblk)
+          Qa    (i,j,iblk) = aflds(i,j, 8,iblk)
+          frzmlt(i,j,iblk) = aflds(i,j, 9,iblk)
+          swvdr (i,j,iblk) = aflds(i,j,10,iblk)
+          swidr (i,j,iblk) = aflds(i,j,11,iblk)
+          swvdf (i,j,iblk) = aflds(i,j,12,iblk)
+          swidf (i,j,iblk) = aflds(i,j,13,iblk)
+          flw   (i,j,iblk) = aflds(i,j,14,iblk)
+          frain (i,j,iblk) = aflds(i,j,15,iblk)
+          fsnow (i,j,iblk) = aflds(i,j,16,iblk)
+        enddo
+      enddo
+    enddo
+!$OMP END PARALLEL DO
 
     if ( State_fldChk(importState, 'Sa_ptem') .and. State_fldchk(importState,'air_density_height_lowest')) then 
-       !$OMP PARALLEL DO PRIVATE(iblk,i,j)
-       do iblk = 1, nblocks
-          do j = 1,ny_block
-             do i = 1,nx_block
-                potT (i,j,iblk) = aflds(i,j, 4,iblk)
-                rhoa (i,j,iblk) = aflds(i,j, 5,iblk)
-             end do
-          end do
-       end do
-       !$OMP END PARALLEL DO
+!$OMP PARALLEL DO PRIVATE(iblk,i,j)
+       do iblk = 1,nblocks
+         do j = 1,ny_block
+           do i = 1,nx_block
+             potT (i,j,iblk) = aflds(i,j, 4,iblk)
+             rhoa (i,j,iblk) = aflds(i,j, 5,iblk)
+           enddo
+         enddo
+       enddo
+!$OMP END PARALLEL DO
     else if (State_fldChk(importState, 'inst_pres_height_lowest')) then
-       !$OMP PARALLEL DO PRIVATE(iblk,i,j)
-       do iblk = 1, nblocks
-          do j = 1,ny_block
-             do i = 1,nx_block
-                inst_pres_height_lowest = aflds(i,j,6,iblk)
-                if (inst_pres_height_lowest > 0.0_ESMF_KIND_R8) then
-                   potT (i,j,iblk) = Tair(i,j,iblk) * (100000._ESMF_KIND_R8/inst_pres_height_lowest)**0.286_ESMF_KIND_R8
-                else
-                   potT (i,j,iblk) = 0.0_ESMF_KIND_R8
-                end if
-                if (Tair(i,j,iblk) /= 0._ESMF_KIND_R8) then
-                   rhoa(i,j,iblk) = inst_pres_height_lowest / &
-                        (287.058_ESMF_KIND_R8*(1._ESMF_KIND_R8+0.608_ESMF_KIND_R8*Qa(i,j,iblk))*Tair(i,j,iblk))
-                else
-                   rhoa(i,j,iblk) = 0._ESMF_KIND_R8
-                endif
-             end do !i
-          end do !j
+!$OMP PARALLEL DO PRIVATE(iblk,i,j,inst_pres_height_lowest)
+       do iblk = 1,nblocks
+         do j = 1,ny_block
+           do i = 1,nx_block
+             inst_pres_height_lowest = aflds(i,j,6,iblk)
+             if (inst_pres_height_lowest > c0) then
+                potT (i,j,iblk) = Tair(i,j,iblk) * (100000._ESMF_KIND_R8/inst_pres_height_lowest)**0.286_ESMF_KIND_R8
+             else
+                potT (i,j,iblk) = c0
+             end if
+             if (Tair(i,j,iblk) /= c0) then
+               rhoa(i,j,iblk) = inst_pres_height_lowest / &
+                        (287.058_ESMF_KIND_R8*(c1+0.608_ESMF_KIND_R8*Qa(i,j,iblk))*Tair(i,j,iblk))
+             else
+               rhoa(i,j,iblk) = c0
+             endif
+           end do !i
+         end do !j
        end do !iblk   
-       !$OMP END PARALLEL DO
+!$OMP END PARALLEL DO
     end if
 
     deallocate(aflds)
@@ -547,20 +542,20 @@ contains
        call t_stopf ('cice_imp_halo')
     endif
 
-    !$OMP PARALLEL DO PRIVATE(iblk,i,j)
+!$OMP PARALLEL DO PRIVATE(iblk,i,j)
     do iblk = 1, nblocks
-       do j = 1,ny_block
-          do i = 1,nx_block
-             uocn (i,j,iblk)   = aflds(i,j, 1,iblk)
-             vocn (i,j,iblk)   = aflds(i,j, 2,iblk)
-             uatm (i,j,iblk)   = aflds(i,j, 3,iblk)
-             vatm (i,j,iblk)   = aflds(i,j, 4,iblk)
-             ss_tltx(i,j,iblk) = aflds(i,j, 5,iblk)
-             ss_tlty(i,j,iblk) = aflds(i,j, 6,iblk)
-          enddo  !i
-       enddo     !j
-    enddo        !iblk
-    !$OMP END PARALLEL DO
+      do j = 1,ny_block
+        do i = 1,nx_block
+          uocn (i,j,iblk)   = aflds(i,j, 1,iblk)
+          vocn (i,j,iblk)   = aflds(i,j, 2,iblk)
+          uatm (i,j,iblk)   = aflds(i,j, 3,iblk)
+          vatm (i,j,iblk)   = aflds(i,j, 4,iblk)
+          ss_tltx(i,j,iblk) = aflds(i,j, 5,iblk)
+          ss_tlty(i,j,iblk) = aflds(i,j, 6,iblk)
+        enddo  !i
+      enddo    !j
+    enddo      !iblk
+!$OMP END PARALLEL DO
 
     deallocate(aflds)
 
@@ -659,50 +654,49 @@ contains
 
     call t_startf ('cice_imp_ocn')
 
-    !$OMP PARALLEL DO PRIVATE(iblk,i,j,workx,worky)
+!$OMP PARALLEL DO PRIVATE(iblk,i,j,workx,worky,sina,cosa)
     do iblk = 1, nblocks
 
-       do j = 1,ny_block
-          do i = 1,nx_block
-             ! ocean
-             workx      = uocn  (i,j,iblk) ! currents, m/s
-             worky      = vocn  (i,j,iblk)
+      do j = 1,ny_block
+        do i = 1,nx_block
+                                                      ! ocean
+          sina  = sin(ANGLET(i,j,iblk))
+          cosa  = cos(ANGLET(i,j,iblk))
 
-             uocn(i,j,iblk) = workx*cos(ANGLET(i,j,iblk)) & ! rotate to align with model i,j
-                            + worky*sin(ANGLET(i,j,iblk))
-             vocn(i,j,iblk) = worky*cos(ANGLET(i,j,iblk)) &
-                            - workx*sin(ANGLET(i,j,iblk))
+          workx = uocn  (i,j,iblk) ! currents, m/s
+          worky = vocn  (i,j,iblk)
 
-             workx      = ss_tltx  (i,j,iblk)           ! sea sfc tilt, m/m
-             worky      = ss_tlty  (i,j,iblk)
+          uocn(i,j,iblk) = workx*cosa + worky*sina    ! rotate to align with model i,j
+          vocn(i,j,iblk) = worky*cosa - workx*sina
 
-             ss_tltx(i,j,iblk) = workx*cos(ANGLET(i,j,iblk)) & ! rotate to align with model i,j
-                               + worky*sin(ANGLET(i,j,iblk))
-             ss_tlty(i,j,iblk) = worky*cos(ANGLET(i,j,iblk)) &
-                               - workx*sin(ANGLET(i,j,iblk))
+          workx = ss_tltx(i,j,iblk)                   ! sea sfc tilt, m/m
+          worky = ss_tlty(i,j,iblk)
 
-             sst(i,j,iblk) = sst(i,j,iblk) - Tffresh       ! sea sfc temp (C)
+          ss_tltx(i,j,iblk) = workx*cosa + worky*sina ! rotate to align with model i,j
+          ss_tlty(i,j,iblk) = worky*cosa - workx*sina
 
-             sss(i,j,iblk) = max(sss(i,j,iblk),c0)
+          sst(i,j,iblk) = sst(i,j,iblk) - Tffresh     ! sea sfc temp (C)
 
-          enddo
-       enddo
-    end do
+          sss(i,j,iblk) = max(sss(i,j,iblk),c0)
+
+        enddo
+      enddo
+    enddo
 
 #ifdef CESMCOUPLED
     ! Use shr_frz_mod for this
     Tf(:,:,iblk) = shr_frz_freezetemp(sss(:,:,iblk))
 #else       
-    !$OMP PARALLEL DO PRIVATE(iblk,i,j,workx,worky)
+!$OMP PARALLEL DO PRIVATE(iblk,i,j,workx,worky)
     do iblk = 1, nblocks
-       do j = 1,ny_block
-          do i = 1,nx_block
+      do j = 1,ny_block
+        do i = 1,nx_block
              !TODO: tcx should this be icepack_sea_freezing_temperature?
-             Tf (i,j,iblk) = icepack_liquidus_temperature(sss(i,j,iblk))
-          end do
-       end do
-    end do
-    !$OMP END PARALLEL DO
+          Tf (i,j,iblk) = icepack_liquidus_temperature(sss(i,j,iblk))
+        enddo
+      enddo
+    enddo
+!$OMP END PARALLEL DO
 #endif
 
     call t_stopf ('cice_imp_ocn')
@@ -710,7 +704,7 @@ contains
     ! Interpolate ocean dynamics variables from T-cell centers to
     ! U-cell centers.
 
-    if (.not.prescribed_ice) then
+    if (.not. prescribed_ice) then
        call t_startf ('cice_imp_t2u')
        call t2ugrid_vector(uocn)
        call t2ugrid_vector(vocn)
@@ -724,26 +718,24 @@ contains
     ! later as necessary.
 
     call t_startf ('cice_imp_atm')
-    !$OMP PARALLEL DO PRIVATE(iblk,i,j,workx,worky)
+!$OMP PARALLEL DO PRIVATE(iblk,i,j,workx,worky)
     do iblk = 1, nblocks
-       do j = 1, ny_block
-          do i = 1, nx_block
+      do j = 1, ny_block
+        do i = 1, nx_block
+                                                    ! atmosphere
+          sina  = sin(ANGLET(i,j,iblk))
+          cosa  = cos(ANGLET(i,j,iblk))
+          workx = uatm(i,j,iblk)                    ! wind velocity, m/s
+          worky = vatm(i,j,iblk)
+          uatm(i,j,iblk) = workx*cosa + worky*sina  ! convert to POP grid - note uatm, vatm, wind
+          vatm(i,j,iblk) = worky*cosa - workx*sina  ! are on the T-grid here
 
-             ! atmosphere
-             workx      = uatm(i,j,iblk) ! wind velocity, m/s
-             worky      = vatm(i,j,iblk)
-             uatm (i,j,iblk) = workx*cos(ANGLET(i,j,iblk)) & ! convert to POP grid
-                             + worky*sin(ANGLET(i,j,iblk))   ! note uatm, vatm, wind
-             vatm (i,j,iblk) = worky*cos(ANGLET(i,j,iblk)) & ! are on the T-grid here
-                             - workx*sin(ANGLET(i,j,iblk))
-
-             wind (i,j,iblk) = sqrt(uatm(i,j,iblk)**2 + vatm(i,j,iblk)**2)
-             fsw  (i,j,iblk) = swvdr(i,j,iblk) + swvdf(i,j,iblk) &
-                             + swidr(i,j,iblk) + swidf(i,j,iblk)
-          enddo
-       enddo
+          wind(i,j,iblk) = sqrt(uatm(i,j,iblk)*uatm(i,j,iblk) + vatm(i,j,iblk)*vatm(i,j,iblk))
+          fsw (i,j,iblk) = swvdr(i,j,iblk) + swvdf(i,j,iblk) + swidr(i,j,iblk) + swidf(i,j,iblk)
+        enddo
+      enddo
     enddo
-    !$OMP END PARALLEL DO
+!$OMP END PARALLEL DO
     call t_stopf ('cice_imp_atm')
 
   end subroutine ice_import
@@ -761,7 +753,7 @@ contains
     integer                 :: i, j, iblk, n                        ! incides
     integer                 :: n2                                   ! thickness category index
     integer                 :: ilo, ihi, jlo, jhi                   ! beginning and end of physical domain
-    real    (kind=dbl_kind) :: workx, worky                         ! tmps for converting grid
+    real    (kind=dbl_kind) :: workx, worky, cosa, sina             ! tmps for converting grid
     integer (kind=int_kind) :: icells                               ! number of ocean/ice cells
     logical                 :: flag
     integer (kind=int_kind) :: indxi (nx_block*ny_block)            ! compressed indices in i
@@ -781,90 +773,95 @@ contains
     if (dbug > 5) call ESMF_LogWrite(subname//' called', ESMF_LOGMSG_INFO)
 
     call icepack_query_parameters(Tffresh_out=Tffresh)
-!    call icepack_query_parameters(tfrz_option_out=tfrz_option, &
+!   call icepack_query_parameters(tfrz_option_out=tfrz_option, &
 !       modal_aero_out=modal_aero, z_tracers_out=z_tracers, skl_bgc_out=skl_bgc, &
 !       Tffresh_out=Tffresh)
-!    call icepack_query_tracer_flags(tr_aero_out=tr_aero, tr_iage_out=tr_iage, &
+!   call icepack_query_tracer_flags(tr_aero_out=tr_aero, tr_iage_out=tr_iage, &
 !       tr_FY_out=tr_FY, tr_pond_out=tr_pond, tr_lvl_out=tr_lvl, &
 !       tr_zaero_out=tr_zaero, tr_bgc_Nit_out=tr_bgc_Nit)
     call icepack_warnings_flush(nu_diag)
-    if (icepack_warnings_aborted()) call abort_ice(error_message=subname, &
-        file=u_FILE_u, line=__LINE__)
+    if (icepack_warnings_aborted()) call abort_ice(error_message=subname, file=u_FILE_u, line=__LINE__)
 
     !calculate ice thickness from aice and vice. Also
     !create Tsrf from the first tracer (trcr) in ice_state.F
 
-    ailohi(:,:,:) = c0
-    Tsrf(:,:,:)  = c0
-    tauxa(:,:,:) = c0
-    tauya(:,:,:) = c0
-    tauxo(:,:,:) = c0
-    tauyo(:,:,:) = c0
-
-    !$OMP PARALLEL DO PRIVATE(iblk,i,j,workx,worky, this_block, ilo, ihi, jlo, jhi)
-    do iblk = 1, nblocks
-       this_block = get_block(blocks_ice(iblk),iblk)
-       ilo = this_block%ilo
-       ihi = this_block%ihi
-       jlo = this_block%jlo
-       jhi = this_block%jhi
-
-       do j = jlo,jhi
-          do i = ilo,ihi
-             ! ice fraction
-             ailohi(i,j,iblk) = min(aice(i,j,iblk), c1)
-
-             ! surface temperature
-             Tsrf(i,j,iblk)  = Tffresh + trcr(i,j,1,iblk)     !Kelvin (original ???)
-
-             ! wind stress  (on POP T-grid:  convert to lat-lon)
-             workx = strairxT(i,j,iblk)                             ! N/m^2
-             worky = strairyT(i,j,iblk)                             ! N/m^2
-             tauxa(i,j,iblk) = workx*cos(ANGLET(i,j,iblk)) - worky*sin(ANGLET(i,j,iblk))
-             tauya(i,j,iblk) = worky*cos(ANGLET(i,j,iblk)) + workx*sin(ANGLET(i,j,iblk))
-
-             ! ice/ocean stress (on POP T-grid:  convert to lat-lon)
-             workx = -strocnxT(i,j,iblk)                            ! N/m^2
-             worky = -strocnyT(i,j,iblk)                            ! N/m^2
-             tauxo(i,j,iblk) = workx*cos(ANGLET(i,j,iblk)) - worky*sin(ANGLET(i,j,iblk))
-             tauyo(i,j,iblk) = worky*cos(ANGLET(i,j,iblk)) + workx*sin(ANGLET(i,j,iblk))
-          enddo
-       enddo
+!$omp parallel do private(i, j, iblk)
+    do iblk=1,max_blocks
+      do j=1,ny_block
+        do i=1,nx_block
+          ailohi(i,j,iblk) = c0
+          Tsrf  (i,j,iblk) = c0
+          tauxa (i,j,iblk) = c0
+          tauya (i,j,iblk) = c0
+          tauxo (i,j,iblk) = c0
+          tauyo( i,j,iblk) = c0
+        enddo
+      enddo
     enddo
-    !$OMP END PARALLEL DO
 
-    flag=.false.
+!$OMP PARALLEL DO PRIVATE(iblk,i,j,workx,worky, this_block, ilo, ihi, jlo, jhi, cosa, sina)
     do iblk = 1, nblocks
-       this_block = get_block(blocks_ice(iblk),iblk)
-       ilo = this_block%ilo
-       ihi = this_block%ihi
-       jlo = this_block%jlo
-       jhi = this_block%jhi
-       do j = jlo,jhi
-          do i = ilo,ihi
-             if (tmask(i,j,iblk) .and. ailohi(i,j,iblk) < c0 ) then
-                flag = .true.
-             endif
-          end do
-       end do
-    end do
+      this_block = get_block(blocks_ice(iblk),iblk)
+      ilo = this_block%ilo
+      ihi = this_block%ihi
+      jlo = this_block%jlo
+      jhi = this_block%jhi
+
+      do j = jlo,jhi
+        do i = ilo,ihi
+          ailohi(i,j,iblk) = min(aice(i,j,iblk), c1)      ! ice fraction
+
+          Tsrf(i,j,iblk)   = Tffresh + trcr(i,j,1,iblk)   ! surface temperature Kelvin (original ???)
+
+                                                          ! wind stress  (on POP T-grid:  convert to lat-lon)
+          cosa  = cos(ANGLET(i,j,iblk)
+          sina  = sin(ANGLET(i,j,iblk)
+          workx = strairxT(i,j,iblk)                      ! N/m^2
+          worky = strairyT(i,j,iblk)                      ! N/m^2
+          tauxa(i,j,iblk) = workx*cosa - worky*sina
+          tauya(i,j,iblk) = worky*cosa + workx*sina
+                                                          ! ice/ocean stress (on POP T-grid:  convert to lat-lon)
+          workx = -strocnxT(i,j,iblk)                     ! N/m^2
+          worky = -strocnyT(i,j,iblk)                     ! N/m^2
+          tauxo(i,j,iblk) = workx*cosa - worky*sina
+          tauyo(i,j,iblk) = worky*cosa + workx*sina
+        enddo
+      enddo
+    enddo
+!$OMP END PARALLEL DO
+
+    flag = .false.
+    do iblk = 1, nblocks
+      this_block = get_block(blocks_ice(iblk),iblk)
+      ilo = this_block%ilo
+      ihi = this_block%ihi
+      jlo = this_block%jlo
+      jhi = this_block%jhi
+      do j = jlo,jhi
+        do i = ilo,ihi
+          if (tmask(i,j,iblk) .and. ailohi(i,j,iblk) < c0 ) then
+             flag = .true.
+          endif
+        enddo
+      enddo
+    enddo
     if (flag) then
-       do iblk = 1, nblocks
-          this_block = get_block(blocks_ice(iblk),iblk)
-          ilo = this_block%ilo
-          ihi = this_block%ihi
-          jlo = this_block%jlo
-          jhi = this_block%jhi
-          do j = jlo,jhi
-             do i = ilo,ihi
-                if (tmask(i,j,iblk) .and. ailohi(i,j,iblk) < c0 ) then
-                   write(nu_diag,*) &
-                        ' (ice) send: ERROR ailohi < 0.0 ',i,j,ailohi(i,j,iblk)
-                   call flush_fileunit(nu_diag)
-                endif
-             end do
-          end do
-       end do
+      do iblk = 1, nblocks
+        this_block = get_block(blocks_ice(iblk),iblk)
+        ilo = this_block%ilo
+        ihi = this_block%ihi
+        jlo = this_block%jlo
+        jhi = this_block%jhi
+        do j = jlo,jhi
+          do i = ilo,ihi
+            if (tmask(i,j,iblk) .and. ailohi(i,j,iblk) < c0 ) then
+               write(nu_diag,*) &
+                     ' (ice) send: ERROR ailohi < 0.0 ',i,j,ailohi(i,j,iblk)
+               call flush_fileunit(nu_diag)
+            endif
+          enddo
+        enddo
+      enddo
     endif
 
     !---------------------------------
@@ -883,24 +880,25 @@ contains
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     if (trim(grid_type) == 'latlon') then
-       call state_setexport(exportState, 'ice_mask', input=ocn_gridcell_frac, rc=rc)
-       if (ChkErr(rc,__LINE__,u_FILE_u)) return
+      call state_setexport(exportState, 'ice_mask', input=ocn_gridcell_frac, rc=rc)
+      if (ChkErr(rc,__LINE__,u_FILE_u)) return
     else
-       do iblk = 1, nblocks
-          this_block = get_block(blocks_ice(iblk),iblk)
-          ilo = this_block%ilo
-          ihi = this_block%ihi
-          jlo = this_block%jlo
-          jhi = this_block%jhi
-          do j = jlo, jhi
-             do i = ilo, ihi
-                tempfld(i,j,iblk) = real(nint(hm(i,j,iblk)),kind=dbl_kind)
-             end do
-          end do
-       end do
-       call state_setexport(exportState, 'ice_mask', input=tempfld, rc=rc)
-       if (ChkErr(rc,__LINE__,u_FILE_u)) return
-    end if
+      do iblk = 1, nblocks
+        this_block = get_block(blocks_ice(iblk),iblk)
+        ilo = this_block%ilo
+        ihi = this_block%ihi
+        jlo = this_block%jlo
+        jhi = this_block%jhi
+!$omp parallel do private(i,j)
+        do j = jlo, jhi
+          do i = ilo, ihi
+            tempfld(i,j,iblk) = real(nint(hm(i,j,iblk)),kind=dbl_kind)
+          enddo
+        enddo
+      enddo
+      call state_setexport(exportState, 'ice_mask', input=tempfld, rc=rc)
+      if (ChkErr(rc,__LINE__,u_FILE_u)) return
+    endif
 
     ! ----
     ! States from ice
@@ -948,20 +946,21 @@ contains
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     ! Snow height
+!$omp parallel do private(i,j,iblk,this_block,ilo,ihi,jlo,jhi)
     do iblk = 1, nblocks
-       this_block = get_block(blocks_ice(iblk),iblk)
-       ilo = this_block%ilo
-       ihi = this_block%ihi
-       jlo = this_block%jlo
-       jhi = this_block%jhi
-       do j = jlo, jhi
-          do i = ilo, ihi
-             if ( tmask(i,j,iblk) .and. ailohi(i,j,iblk) > c0 ) then
-                tempfld(i,j,iblk) = vsno(i,j,iblk)/ailohi(i,j,iblk)
-             end if
-          end do
-       end do
-    end do
+      this_block = get_block(blocks_ice(iblk),iblk)
+      ilo = this_block%ilo
+      ihi = this_block%ihi
+      jlo = this_block%jlo
+      jhi = this_block%jhi
+      do j = jlo, jhi
+        do i = ilo, ihi
+          if ( tmask(i,j,iblk) .and. ailohi(i,j,iblk) > c0 ) then
+             tempfld(i,j,iblk) = vsno(i,j,iblk) / ailohi(i,j,iblk)
+          endif
+        enddo
+      enddo
+    enddo
     call state_setexport(exportState, 'Si_snowh' , input=tempfld , lmask=tmask, ifrac=ailohi, rc=rc)
     if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
@@ -1076,13 +1075,13 @@ contains
        ! HDO => ungridded_index=3
 
        call state_setexport(exportState, 'mean_fresh_water_to_ocean_rate_wiso' , input=fiso_ocn, index=1, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=3, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=3, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
        call state_setexport(exportState, 'mean_fresh_water_to_ocean_rate_wiso' , input=fiso_ocn, index=2, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=1, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=1, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
        call state_setexport(exportState, 'mean_fresh_water_to_ocean_rate_wiso' , input=fiso_ocn, index=3, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=2, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=2, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
     end if
 
@@ -1093,24 +1092,24 @@ contains
     if (State_FldChk(exportState, 'mean_evap_rate_atm_into_ice_wiso')) then
        !  Isotope evap to atm
        call state_setexport(exportState, 'mean_evap_rate_atm_into_ice_wiso' , input=fiso_evap, index=1, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=3, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=3, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
        call state_setexport(exportState, 'mean_evap_rate_atm_into_ice_wiso' , input=fiso_evap, index=2, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=1, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=1, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
        call state_setexport(exportState, 'mean_evap_rate_atm_into_ice_wiso' , input=fiso_evap, index=3, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=2, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=2, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
        !  Isotope evap to atm
        call state_setexport(exportState, 'Si_qref_wiso' , input=Qref_iso, index=1, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=3, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=3, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
        call state_setexport(exportState, 'Si_qref_wiso' , input=Qref_iso, index=2, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=1, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=1, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
        call state_setexport(exportState, 'Si_qref_wiso' , input=Qref_iso, index=3, &
-            lmask=tmask, ifrac=ailohi, ungridded_index=2, rc=rc)
+                            lmask=tmask, ifrac=ailohi, ungridded_index=2, rc=rc)
        if (ChkErr(rc,__LINE__,u_FILE_u)) return
     endif
 
@@ -1123,14 +1122,14 @@ contains
          State_FldChk(exportState, 'mean_sw_pen_to_ocn_ifrac_n')) then
        do n = 1,ncat
           call state_setexport(exportState, 'ice_fraction_n', input=aicen_init, index=n, &
-               ungridded_index=n, rc=rc)
+                               ungridded_index=n, rc=rc)
           if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
           ! penetrative shortwave by category
           ! Note: no need zero out pass-through fields over land for benefit of x2oacc fields in cpl hist files since
           ! the export state has been zeroed out at the beginning
           call state_setexport(exportState, 'mean_sw_pen_to_ocn_ifrac_n', input=fswthrun_ai, index=n, &
-               lmask=tmask, ifrac=ailohi, ungridded_index=n, rc=rc)
+                               lmask=tmask, ifrac=ailohi, ungridded_index=n, rc=rc)
           if (ChkErr(rc,__LINE__,u_FILE_u)) return
        end do
     end if
@@ -1200,60 +1199,61 @@ contains
     rc = ESMF_SUCCESS
 
     do n = 1, numflds
-       stdname = fldList(n)%stdname
-       if (NUOPC_IsConnected(state, fieldName=stdname)) then
-          if (stdname == trim(flds_scalar_name)) then
-             call ESMF_LogWrite(trim(subname)//trim(tag)//" Field = "//trim(stdname)//" is connected on root pe", &
-                  ESMF_LOGMSG_INFO)
-             ! Create the scalar field
-             call SetScalarField(field, flds_scalar_name, flds_scalar_num, rc=rc)
-             if (ChkErr(rc,__LINE__,u_FILE_u)) return
-          else
-             if (present(mesh)) then
-                call ESMF_LogWrite(trim(subname)//trim(tag)//" Field = "//trim(stdname)//" is connected using mesh", &
-                     ESMF_LOGMSG_INFO)
-                ! Create the field
-                if (fldlist(n)%ungridded_lbound > 0 .and. fldlist(n)%ungridded_ubound > 0) then
-                   field = ESMF_FieldCreate(mesh, ESMF_TYPEKIND_R8, name=stdname, meshloc=ESMF_MESHLOC_ELEMENT, &
-                        ungriddedLbound=(/fldlist(n)%ungridded_lbound/), &
-                        ungriddedUbound=(/fldlist(n)%ungridded_ubound/), &
-                        gridToFieldMap=(/2/), rc=rc)
-                   if (ChkErr(rc,__LINE__,u_FILE_u)) return
-                else
-                   field = ESMF_FieldCreate(mesh, ESMF_TYPEKIND_R8, name=stdname, meshloc=ESMF_MESHLOC_ELEMENT, rc=rc)
-                   if (ChkErr(rc,__LINE__,u_FILE_u)) return
-                end if
-             else if (present(grid)) then
-                call ESMF_LogWrite(trim(subname)//trim(tag)//" Field = "//trim(stdname)//" is connected using grid", &
-                     ESMF_LOGMSG_INFO)
-                if (fldlist(n)%ungridded_lbound > 0 .and. fldlist(n)%ungridded_ubound > 0) then
-                   field = ESMF_FieldCreate(grid, ESMF_TYPEKIND_R8, name=stdname, indexflag=ESMF_INDEX_DELOCAL, &
-                        ungriddedLBound=(/1,1/), ungriddedUBound=(/max_blocks,fldlist(n)%ungridded_ubound/), rc=rc)
-                   if (ChkErr(rc,__LINE__,u_FILE_u)) return
-                else
-                   field = ESMF_FieldCreate(grid, ESMF_TYPEKIND_R8, name=stdname, indexflag=ESMF_INDEX_DELOCAL, &
-                        ungriddedLBound=(/1/), ungriddedUBound=(/max_blocks/), rc=rc)
-                   if (ChkErr(rc,__LINE__,u_FILE_u)) return
-                end if
-             else
-                call ESMF_LogWrite(subname // 'input must be grid or mesh', ESMF_LOGMSG_INFO)
-                rc = ESMF_FAILURE
-                return
-             end if
-          end if ! if not scalar field
-
-          ! NOW call NUOPC_Realize
-          call NUOPC_Realize(state, field=field, rc=rc)
+      stdname = fldList(n)%stdname
+      if (NUOPC_IsConnected(state, fieldName=stdname)) then
+        if (stdname == trim(flds_scalar_name)) then
+          call ESMF_LogWrite(trim(subname)//trim(tag)//" Field = "//trim(stdname)//" is connected on root pe", &
+                             ESMF_LOGMSG_INFO)
+          ! Create the scalar field
+          call SetScalarField(field, flds_scalar_name, flds_scalar_num, rc=rc)
           if (ChkErr(rc,__LINE__,u_FILE_u)) return
-       else
-          if (stdname /= trim(flds_scalar_name)) then
-             call ESMF_LogWrite(subname // trim(tag) // " Field = "// trim(stdname) // " is not connected.", &
-                  ESMF_LOGMSG_INFO)
-             call ESMF_StateRemove(state, (/stdname/), rc=rc)
-             if (ChkErr(rc,__LINE__,u_FILE_u)) return
-          end if
-       end if
-    end do
+        else
+          if (present(mesh)) then
+            call ESMF_LogWrite(trim(subname)//trim(tag)//" Field = "//trim(stdname)//" is connected using mesh", &
+                               ESMF_LOGMSG_INFO)
+            ! Create the field
+            if (fldlist(n)%ungridded_lbound > 0 .and. fldlist(n)%ungridded_ubound > 0) then
+               field = ESMF_FieldCreate(mesh, ESMF_TYPEKIND_R8, name=stdname, meshloc=ESMF_MESHLOC_ELEMENT, &
+                                        ungriddedLbound=(/fldlist(n)%ungridded_lbound/), &
+                                        ungriddedUbound=(/fldlist(n)%ungridded_ubound/), &
+                                        gridToFieldMap=(/2/), rc=rc)
+               if (ChkErr(rc,__LINE__,u_FILE_u)) return
+            else
+               field = ESMF_FieldCreate(mesh, ESMF_TYPEKIND_R8, name=stdname, meshloc=ESMF_MESHLOC_ELEMENT, rc=rc)
+               if (ChkErr(rc,__LINE__,u_FILE_u)) return
+            end if
+          else if (present(grid)) then
+            call ESMF_LogWrite(trim(subname)//trim(tag)//" Field = "//trim(stdname)//" is connected using grid", &
+                               ESMF_LOGMSG_INFO)
+            if (fldlist(n)%ungridded_lbound > 0 .and. fldlist(n)%ungridded_ubound > 0) then
+              field = ESMF_FieldCreate(grid, ESMF_TYPEKIND_R8, name=stdname, indexflag=ESMF_INDEX_DELOCAL, &
+                                       ungriddedLBound=(/1,1/),                                            &
+                                       ungriddedUBound=(/max_blocks,fldlist(n)%ungridded_ubound/), rc=rc)
+              if (ChkErr(rc,__LINE__,u_FILE_u)) return
+            else
+              field = ESMF_FieldCreate(grid, ESMF_TYPEKIND_R8, name=stdname, indexflag=ESMF_INDEX_DELOCAL, &
+                                       ungriddedLBound=(/1/), ungriddedUBound=(/max_blocks/), rc=rc)
+              if (ChkErr(rc,__LINE__,u_FILE_u)) return
+            endif
+          else
+            call ESMF_LogWrite(subname // 'input must be grid or mesh', ESMF_LOGMSG_INFO)
+            rc = ESMF_FAILURE
+            return
+          endif
+        endif ! if not scalar field
+
+        ! NOW call NUOPC_Realize
+        call NUOPC_Realize(state, field=field, rc=rc)
+        if (ChkErr(rc,__LINE__,u_FILE_u)) return
+      else
+        if (stdname /= trim(flds_scalar_name)) then
+          call ESMF_LogWrite(subname // trim(tag) // " Field = "// trim(stdname) // " is not connected.", &
+                             ESMF_LOGMSG_INFO)
+          call ESMF_StateRemove(state, (/stdname/), rc=rc)
+          if (ChkErr(rc,__LINE__,u_FILE_u)) return
+        endif
+      endif
+    enddo
 
   contains  !- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1286,7 +1286,7 @@ contains
       if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
       field = ESMF_FieldCreate(name=trim(flds_scalar_name), grid=grid, typekind=ESMF_TYPEKIND_R8, &
-           ungriddedLBound=(/1/), ungriddedUBound=(/flds_scalar_num/), gridToFieldMap=(/2/), rc=rc)
+                               ungriddedLBound=(/1/), ungriddedUBound=(/flds_scalar_num/), gridToFieldMap=(/2/), rc=rc)
       if (ChkErr(rc,__LINE__,u_FILE_u)) return
 
     end subroutine SetScalarField

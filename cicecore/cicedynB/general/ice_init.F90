@@ -210,6 +210,7 @@
         highfreq,       natmiter,        atmiter_conv,                  &
         ustar_min,      emissivity,                                     &
         fbot_xfer_type, update_ocn_f,    l_mpond_fresh, tfrz_option,    &
+        restart_coszen,                                                 &
         oceanmixed_ice, restore_ice,     restore_ocn,   trestore,       &
         precip_units,   default_season,  wave_spec_type,nfreq,          &
         atm_data_type,  ocn_data_type,   bgc_data_type, fe_data_type,   &

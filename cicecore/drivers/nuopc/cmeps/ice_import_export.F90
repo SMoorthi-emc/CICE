@@ -814,8 +814,8 @@ contains
           Tsrf(i,j,iblk)   = Tffresh + trcr(i,j,1,iblk)   ! surface temperature Kelvin (original ???)
 
                                                           ! wind stress  (on POP T-grid:  convert to lat-lon)
-          cosa  = cos(ANGLET(i,j,iblk)
-          sina  = sin(ANGLET(i,j,iblk)
+          cosa  = cos(ANGLET(i,j,iblk))
+          sina  = sin(ANGLET(i,j,iblk))
           workx = strairxT(i,j,iblk)                      ! N/m^2
           worky = strairyT(i,j,iblk)                      ! N/m^2
           tauxa(i,j,iblk) = workx*cosa - worky*sina

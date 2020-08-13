@@ -22,6 +22,8 @@ else if (${SITE} =~ orion*) then
   setenv ARCH orion_intel
 else if (${SITE} =~ hera*) then
   setenv ARCH hera_intel
+else if (${SITE} =~ wcoss*) then
+  setenv ARCH phase3_intel
 else
   echo "CICE6 ${0}: ERROR in ARCH setup, ${hname}"
   exit -2

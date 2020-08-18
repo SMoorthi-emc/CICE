@@ -5,18 +5,21 @@
 CPP        := fpp
 CPPDEFS    := -DFORTRANUNDERSCORE ${ICE_CPPDEFS}
 
-#CFLAGS     := -c -O2 -fp-model precise   -xHost
-CFLAGS     := -c -O2 
+CFLAGS     := -c -O2 -fp-model precise   -xHost
+#CFLAGS     := -c -O2 
 
 FIXEDFLAGS := -132
 FREEFLAGS  := -FR
-FFLAGS     := -fp-model precise -convert big_endian -assume byterecl -ftz -traceback   -xHost
+
+FFLAGS_DEBUG := -g -O0 -fp-model precise -convert big_endian -assume byterecl -ftz -traceback -link_mpi=dbg -xHost
+FFLAGS_OPT   := -O2 -fp-model precise -convert big_endian -assume byterecl -ftz -traceback -xHost
+#FFLAGS     := -O2 -fp-model precise -convert big_endian -assume byterecl -ftz -traceback -xHost
 FFLAGS_NOOPT:= -O0
 
 ifeq ($(ICE_BLDDEBUG), true)
-  FFLAGS     += -O0 -g -check uninit -check bounds -check pointers -fpe0 -check noarg_temp_created -link_mpi=dbg
+  FFLAGS += $(FFLAGS_DEBUG)
 else
-  FFLAGS     += -O2
+  FFLAGS += $(FFLAGS_OPT)
 endif
 
 SCC   := icc 

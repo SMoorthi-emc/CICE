@@ -2,7 +2,7 @@
 ###! /bin/csh -f
 
 ### Expect to find the following environment variables set on entry:
-# SITE
+# MACHINE_ID
 # SYSTEM_USERDIR
 # SRCDIR
 # EXEDIR
@@ -19,17 +19,15 @@ setenv OBJDIR $EXEDIR/compile           ; if !(-d $OBJDIR) mkdir -p $OBJDIR
 #setenv THRD     yes      # set to yes for OpenMP threading
 #setenv DEBUG    Y        # set to yes for OpenMP threading
 
-if (${SITE} =~ cheyenne*) then
+echo "input MACHINE_ID = $MACHINE_ID "
+
+if (${MACHINE_ID} =~ cheyenne*) then
   setenv ARCH cheyenne_intel
-else if (${SITE} =~ orion*) then
+else if (${MACHINE_ID} =~ orion*) then
   setenv ARCH orion_intel
-else if (${SITE} =~ hera*) then
+else if (${MACHINE_ID} =~ hera*) then
   setenv ARCH hera_intel
-else if (${SITE} =~ wcoss*) then
-  setenv ARCH phase3_intel
-else if (${SITE} =~ MARS*) then
-  setenv ARCH phase3_intel
-else if (${SITE} =~ VENUS*) then
+else if (${MACHINE_ID} =~ wcoss*) then
   setenv ARCH phase3_intel
 else
   echo "CICE6 ${0}: ERROR in ARCH setup, ${hname}"
@@ -48,6 +46,12 @@ setenv DRVDIR nuopc/cmeps
 #else
    setenv ICE_COMMDIR mpi 
 #endif
+
+if ($DEBUG == 'Y') then
+  setenv ICE_BLDDEBUG true
+else
+  setenv ICE_BLDDEBUG false
+endif
 
 if ($THRD == 'yes') then
   setenv ICE_THREADED true

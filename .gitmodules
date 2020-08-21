@@ -1,4 +1,4 @@
 [submodule "icepack"]
 	path = icepack
 	url = https://github.com/SMoorthi-emc/Icepack
-	branch = master
+	branch = SM_Aug192020

@@ -16,7 +16,7 @@
 setenv OBJDIR $EXEDIR/compile           ; if !(-d $OBJDIR) mkdir -p $OBJDIR
 
  setenv THRD     no       # set to yes for OpenMP threading
-#setenv THRD     yes      # set to yes for OpenMP threading
+ setenv THRD     yes      # set to yes for OpenMP threading
 #setenv DEBUG    Y        # set to yes for OpenMP threading
 
 echo "input MACHINE_ID = $MACHINE_ID "

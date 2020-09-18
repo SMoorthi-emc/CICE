@@ -19,8 +19,6 @@ setenv OBJDIR $EXEDIR/compile           ; if !(-d $OBJDIR) mkdir -p $OBJDIR
  setenv THRD     yes      # set to yes for OpenMP threading
 #setenv DEBUG    Y        # set to yes for OpenMP threading
 
-echo "input MACHINE_ID = $MACHINE_ID "
-
 if (${MACHINE_ID} =~ cheyenne*) then
   setenv ARCH cheyenne_intel
 else if (${MACHINE_ID} =~ orion*) then
@@ -28,7 +26,7 @@ else if (${MACHINE_ID} =~ orion*) then
 else if (${MACHINE_ID} =~ hera*) then
   setenv ARCH hera_intel
 else if (${MACHINE_ID} =~ wcoss*) then
-  setenv ARCH phase3_intel
+  setenv ARCH wcoss_dell_p3_intel
 else
   echo "CICE6 ${0}: ERROR in ARCH setup, ${hname}"
   exit -2

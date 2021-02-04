@@ -311,7 +311,7 @@
             enddo
          endif ! tr_aero
 
-         if (tmask(i,j,iblk)) then
+         if (tmask(i,j,iblk) .and. Tair(i,j,iblk) > c0) then
 
          call icepack_step_therm1(dt=dt, ncat=ncat,            &
                       nilyr=nilyr, nslyr=nslyr,                &
